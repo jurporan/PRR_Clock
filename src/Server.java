@@ -8,7 +8,7 @@ public class Server
     {
         PTPMaster master;
         
-        master = new PTPMaster("224.5.6.7", 1212);
+        master = new PTPMaster("228.5.6.7", 1212);
         
         while (true)
         {
