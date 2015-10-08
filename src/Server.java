@@ -12,7 +12,6 @@ public class Server
         
         while (true)
         {
-            master.send();
             Thread.sleep(5000);
         }
     }
