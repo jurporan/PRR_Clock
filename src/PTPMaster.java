@@ -26,8 +26,8 @@ public class PTPMaster
                 while (true)
                 {
                     // Building SYNC message
-                    currentNanoTime = System.nanoTime();
                     tampon[0] = Protocol.SYNC;
+                    currentNanoTime = System.nanoTime();
                     byte[] noObject = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(no++).array();
                     System.arraycopy(noObject, 0, tampon, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
                     byte[] nanoTime = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(currentNanoTime).array();

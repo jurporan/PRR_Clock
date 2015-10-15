@@ -13,7 +13,7 @@ public class PTPSlave
    public static void main(String args[]) throws IOException
    {
       socket = new MulticastSocket(1212);
-      group = InetAddress.getByName("228.5.6.7");
+      group = InetAddress.getByName(Protocol.group);
       socket.joinGroup(group);
 
       threadSync = new Thread(new Runnable() {
@@ -58,13 +58,28 @@ public class PTPSlave
               {
                   try{
                   Random r = new Random();
-                  byte[] tampon = new byte[(Byte.SIZE + Character.SIZE + Long.SIZE) / Byte.SIZE];
-                  DatagramPacket packet = new DatagramPacket(tampon, tampon.length, InetAddress.getByName(Protocol.group), Protocol.port);
+                  byte[] tamponEnvoi = new byte[(Byte.SIZE + Character.SIZE) / Byte.SIZE];
+                  byte[] tamponReception = new byte[(Byte.SIZE + Character.SIZE + Long.SIZE) / Byte.SIZE];
+                  tamponEnvoi[0] = Protocol.DELAY_REQUEST;
+                  char no = 0;
+                  DatagramPacket packetEnvoi = new DatagramPacket(tamponEnvoi, tamponEnvoi.length, InetAddress.getByName(Protocol.group), Protocol.port);
+                  DatagramPacket packetReception = new DatagramPacket(tamponReception, tamponReception.length, InetAddress.getByName(Protocol.group), Protocol.port);
+                  Long currentNanoTime;
 
                   while (true)
                   {
-
-
+                      byte[] noObject = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(no++).array();
+                      System.arraycopy(noObject, 0, tampon, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
+                      
+                      packetEnvoi.setData(tamponEnvoi);
+                      currentNanoTime = System.nanoTime();
+                      PTPSlave.socket.send(packetEnvoi);
+                      
+                      try {PTPSlave.socket.receive(packetReception);}
+                      catch (Exception e) {}
+                      
+                      
+                      
                       try {Thread.sleep(Protocol.K * (r.nextInt(56) + 4));}
                       catch (Exception e) {}
                   }
