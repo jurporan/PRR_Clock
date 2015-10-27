@@ -1,7 +1,3 @@
-import java.nio.*;
-import java.io.*;
-import java.net.*;
-
 public class Protocol
 {
     public static final byte SYNC = 1;
