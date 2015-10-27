@@ -1,11 +1,11 @@
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Queue
+public class Queue extends Thread implements Observer
 {
     private LinkedList<Object[]> queue = new LinkedList<>();
     private ReentrantLock lock = new ReentrantLock();
-    
+
     public Object[] getNext()
     {
         lock.lock();
@@ -15,7 +15,7 @@ public class Queue
         lock.unlock();
         return data;
     }
-    
+
     public void store(Object data, Long time)
     {
         lock.lock();
