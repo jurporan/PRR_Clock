@@ -1,22 +1,33 @@
 import java.util.LinkedList;
-
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Queue extends Thread implements Observer
 {
-    LinkedList<Object[]> queue = new LinkedList<>();
+    private LinkedList<Object[]> queue = new LinkedList<>();
+    private ReentrantLock lock = new ReentrantLock();
 
-    public synchronized Object[] getNext()
+    public Object[] getNext()
     {
-        return queue.removeLast();
+        lock.lock();
+        Object[] data;
+        if (queue.size() > 0)
+        {data = queue.removeLast();}
+        lock.unlock();
+        return data;
     }
 
-    public synchronized void store(byte[] data, Long time)
+    public void store(byte[] data, Long time)
     {
+        lock.lock();
         queue.addFirst(new Object[] {data, time});
+        lock.unlock();
     }
-
-    public synchronized int size()
+    
+    public int size()
     {
-        return queue.size();
+        lock.lock();
+        int size = queue.size();
+        lock.unlock();
+        return size;
     }
 }
