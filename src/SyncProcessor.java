@@ -3,15 +3,15 @@ import java.io.*;
 import java.nio.*;
 import java.util.*;
 
-public class DelayResponse extends Thread implements Observer
+public class SyncProcessor extends Thread implements Observer
 {
-    private DelayRequest sender;
     private Delay delay;
     private Queue queue = new Queue();
+    private Character lastNo;
+    private Long nanotime;
     
-    public DelayResponse(DelayRequest sender, Delay delay)
+    public SyncProcessor(Delay delay)
     {
-        this.sender = sender;
         this.delay = delay;
     }
     
@@ -20,41 +20,41 @@ public class DelayResponse extends Thread implements Observer
         DatagramPacket packet = (DatagramPacket) ((Object[]) arg)[0];
         byte[] data = packet.getData();
         
-        if (data[0] == Protocol.DELAY_RESPONSE)
+        if (data[0] == Protocol.SYNC || data[0] == Protocol.FOLLOW_UP)
         {
             queue.store(data, (Long) ((Object[]) arg)[1]);
             notify();
-        }
-        else if (data[0] == Protocol.SYNC && !sender.isAlive())
-        {
-            sender.setMaster(packet.getAddress());
-            sender.start();
         }
     }
     
     public void run()
     {
-        Character no;
-        Long nanotime;
-        
         while (true)
         {
             if (queue.size() == 0)
             {
+                System.out.println("caca");
                 try {wait();}
-                catch (Exception e) {}
+                catch (Exception e) {System.out.println("prout");}
             }
             
             Object[] packet = queue.getNext();
-            Object[] sent = sender.getLastDelayRequest();
-            
             ByteBuffer bf = ByteBuffer.wrap((byte[]) packet[0]);
-            no = bf.getChar(1);
-            nanotime = bf.getLong(2);
-            
-            if (no == (char) sent[0])
+            byte type = bf.get(0);
+            Character no = bf.getChar(1);
+
+            switch (type)
             {
-                delay.setDelay((nanotime - (Long) sent[1]) / 2);
+                case Protocol.SYNC:
+                nanotime = (Long) packet[1];
+                lastNo = no;
+                break;
+                
+                case Protocol.FOLLOW_UP:
+                if (lastNo != no) {break;}
+                Long time = bf.getLong(2);
+                delay.setDelay(time - nanotime);
+                break;
             }
         }
     }

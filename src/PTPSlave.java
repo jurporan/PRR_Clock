@@ -18,13 +18,15 @@ public class PTPSlave
             socket.joinGroup(group);
             
             DelayRequest sender = new DelayRequest(socket);
+            SyncProcessor sync = new SyncProcessor(delay);
             DelayResponse response = new DelayResponse(sender, delay);
             PacketReceiver receiver = new PacketReceiver(socket);
             
+            receiver.addObserver(sync);
             receiver.addObserver(response);
             
+            sync.start();
             response.start();
-            //receiver.start();
             
             receiver.run();
         }
