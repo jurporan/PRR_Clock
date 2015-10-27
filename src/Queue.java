@@ -3,13 +3,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Queue
 {
-    LinkedList<Object[]> queue = new LinkedList<>();
+    private LinkedList<Object[]> queue = new LinkedList<>();
     private ReentrantLock lock = new ReentrantLock();
     
     public Object[] getNext()
     {
         lock.lock();
-        Object[] data = queue.removeLast();
+        Object[] data;
+        if (queue.size() > 0)
+        {data = queue.removeLast();}
         lock.unlock();
         return data;
     }
