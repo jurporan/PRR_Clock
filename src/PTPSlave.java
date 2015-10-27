@@ -1,3 +1,7 @@
+import java.net.*;
+import java.io.*;
+import java.nio.*;
+
 
 public class PTPSlave
 {
@@ -7,12 +11,24 @@ public class PTPSlave
     
     public PTPSlave()
     {
-        socket = new MulticastSocket(Protocol.port);
-        group = InetAddress.getByName(Protocol.group);
-        socket.joinGroup(group);
-        
-        DelayRequest sender = new DelayRequest(socket);
-        DelayResponse response = new DelayResponse(sender, delay);
+        try
+        {
+            socket = new MulticastSocket(Protocol.port);
+            group = InetAddress.getByName(Protocol.group);
+            socket.joinGroup(group);
+            
+            DelayRequest sender = new DelayRequest(socket);
+            DelayResponse response = new DelayResponse(sender, delay);
+            PacketReceiver receiver = new PacketReceiver(socket);
+            
+            receiver.addObserver(response);
+            
+            response.start();
+            //receiver.start();
+            
+            receiver.run();
+        }
+        catch (Exception e) {}
     }
     
     public static void main(String[] args)

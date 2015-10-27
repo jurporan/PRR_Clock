@@ -1,5 +1,7 @@
-import java.util.*;
+import java.net.*;
+import java.io.*;
 import java.nio.*;
+import java.util.*;
 
 public class DelayResponse extends Thread implements Observer
 {
@@ -15,11 +17,18 @@ public class DelayResponse extends Thread implements Observer
     
     public void update(Observable o, Object arg)
     {
-        Object[] data = (Object[]) arg;
-        if (((byte[]) data[0])[0] == Protocol.DELAY_RESPONSE)
+        DatagramPacket packet = (DatagramPacket) ((Object[]) arg)[0];
+        byte[] data = packet.getData();
+        
+        if (data[0] == Protocol.DELAY_RESPONSE)
         {
-            queue.store((byte[]) data[0], (Long) data[1]);
+            queue.store(data[0], (Long) ((Object[]) arg)[1]);
             notify();
+        }
+        else if (data[0] == Protocol.SYNC && !sender.isAlive())
+        {
+            sender.setMaster(packet.getAddress());
+            sender.start();
         }
     }
     

@@ -8,6 +8,7 @@ public class DelayRequest extends Thread
     private MulticastSocket socket;
     private char lastSentID;
     private Long lastSentTime;
+    private InetAddress master;
     
     public DelayRequest(MulticastSocket socket)
     {
@@ -24,19 +25,19 @@ public class DelayRequest extends Thread
             Long currentNanoTime;
             
             sendBuffer[0] = Protocol.DELAY_REQUEST;
-            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, InetAddress.getByName(Protocol.group), Protocol.port);
+            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, master, Protocol.port);
 
             while (true)
             {
+                try {Thread.sleep(Protocol.K * (r.nextInt(56) + 4));}
+                catch (Exception e) {}
+                
                 byte[] noObject = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(no++).array();
                 System.arraycopy(noObject, 0, sendBuffer, 1, Character.SIZE / Byte.SIZE);
 
                 sendPacket.setData(sendBuffer);
                 currentNanoTime = System.nanoTime();
                 socket.send(sendPacket);
-
-                try {Thread.sleep(Protocol.K * (r.nextInt(56) + 4));}
-                catch (Exception e) {}
             }
         }
         catch (Exception e) {}
@@ -51,5 +52,10 @@ public class DelayRequest extends Thread
     public synchronized Object[] getLastDelayRequest()
     {
         return new Object[] {lastSentID, lastSentTime};
+    }
+    
+    public void setMaster(InetAddress master)
+    {
+        this.master = master;
     }
 }

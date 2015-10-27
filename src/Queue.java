@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Queue extends Thread implements Observer
+public class Queue
 {
     private LinkedList<Object[]> queue = new LinkedList<>();
     private ReentrantLock lock = new ReentrantLock();
