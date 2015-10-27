@@ -1,15 +1,16 @@
 import java.util.*;
-
+import java.nio.*;
 
 public class DelayResponse extends Thread implements Observer
 {
     private DelayRequest sender;
+    private Delay delay;
     private Queue queue = new Queue();
     
-    public DelayResponse(DelayRequest sender)
+    public DelayResponse(DelayRequest sender, Delay delay)
     {
         this.sender = sender;
-        this.queue = queue;
+        this.delay = delay;
     }
     
     public void update(Observable o, Object arg)
@@ -24,7 +25,28 @@ public class DelayResponse extends Thread implements Observer
     
     public void run()
     {
-        try {wait();}
-        catch (Exception e) {}
+        Character no;
+        Long nanotime;
+        
+        while (true)
+        {
+            if (queue.size() == 0)
+            {
+                try {wait();}
+                catch (Exception e) {}
+            }
+            
+            Object[] packet = queue.getNext();
+            Object[] sent = sender.getLastDelayRequest();
+            
+            ByteBuffer bf = ByteBuffer.wrap((byte[]) packet[0]);
+            no = bf.getChar(1);
+            nanotime = bf.getLong(2);
+            
+            if (no == (char) sent[0])
+            {
+                delay.setDelay((nanotime - (Long) sent[1]) / 2);
+            }
+        }
     }
 }

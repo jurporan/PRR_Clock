@@ -9,14 +9,14 @@ public class Queue
     public Object[] getNext()
     {
         lock.lock();
-        Object[] data;
+        Object[] data = null;
         if (queue.size() > 0)
         {data = queue.removeLast();}
         lock.unlock();
         return data;
     }
     
-    public void store(byte[] data, Long time)
+    public void store(Object data, Long time)
     {
         lock.lock();
         queue.addFirst(new Object[] {data, time});
