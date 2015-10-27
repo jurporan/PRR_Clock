@@ -23,7 +23,7 @@ public class SyncProcessor extends Thread implements Observer
         if (data[0] == Protocol.SYNC || data[0] == Protocol.FOLLOW_UP)
         {
             queue.store(data, (Long) ((Object[]) arg)[1]);
-            notify();
+            resume();
         }
     }
     
@@ -33,9 +33,8 @@ public class SyncProcessor extends Thread implements Observer
         {
             if (queue.size() == 0)
             {
-                System.out.println("caca");
-                try {wait();}
-                catch (Exception e) {System.out.println("prout");}
+                try {suspend();}
+                catch (Exception e) {}
             }
             
             Object[] packet = queue.getNext();

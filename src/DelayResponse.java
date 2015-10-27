@@ -23,7 +23,7 @@ public class DelayResponse extends Thread implements Observer
         if (data[0] == Protocol.DELAY_RESPONSE)
         {
             queue.store(data, (Long) ((Object[]) arg)[1]);
-            notify();
+            resume();
         }
         else if (data[0] == Protocol.SYNC && !sender.isAlive())
         {
@@ -41,7 +41,7 @@ public class DelayResponse extends Thread implements Observer
         {
             if (queue.size() == 0)
             {
-                try {wait();}
+                try {suspend();}
                 catch (Exception e) {}
             }
             
