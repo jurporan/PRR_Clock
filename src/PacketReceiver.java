@@ -21,7 +21,6 @@ public class PacketReceiver extends Observable implements Runnable
         buffer = new byte[(Byte.SIZE + Character.SIZE + Long.SIZE) / Byte.SIZE];
         packet = new DatagramPacket(buffer, buffer.length);
         timeStampedPacket = new Object[2];
-        timeStampedPacket[0] = buffer;
     }
 
     public void run()
@@ -30,6 +29,7 @@ public class PacketReceiver extends Observable implements Runnable
         {
             try {socket.receive(packet);}
             catch (Exception e) {}
+            timeStampedPacket[0] = packet;
             timeStampedPacket[1] = System.nanoTime();
 
             setChanged();
