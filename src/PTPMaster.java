@@ -11,7 +11,7 @@ public class PTPMaster
         MulticastSocket socket;
         try
         {
-            socket = new MulticastSocket(Protocol.port);
+            socket = new MulticastSocket(1818);
         }
         catch(IOException e)
         {

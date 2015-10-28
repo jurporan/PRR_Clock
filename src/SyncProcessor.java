@@ -56,8 +56,10 @@ public class SyncProcessor extends Thread implements Observer
                 
                 case Protocol.FOLLOW_UP:
                 if (lastNo != no) {break;}
-                Long time = bf.getLong(2);
+                Long time = bf.getLong(3);
                 delay.setDelay(time - nanotime);
+                System.out.println("Nnaotime local: " + nanotime);
+                System.out.println("Nnaotime recu: " + time);
                 System.out.println("traitement followup: " + (time - nanotime));
                 break;
             }

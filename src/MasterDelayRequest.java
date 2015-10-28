@@ -18,8 +18,8 @@ public class MasterDelayRequest extends Thread implements Observer
         Object[] data = (Object[]) arg;
         if (((DatagramPacket)data[0]).getData()[0] == Protocol.DELAY_REQUEST)
         {
-            requestQueue.store((byte[]) data[0], (Long) data[1]);
-            notify();
+            requestQueue.store(data[0], (Long) data[1]);
+            resume();
         }
     }
 
@@ -37,10 +37,10 @@ public class MasterDelayRequest extends Thread implements Observer
             while(requestQueue.size() > 0)
             {
                 delayRequest = requestQueue.getNext();
-
-                System.arraycopy(((DatagramPacket)delayRequest[0]).getData()[1], 0, buffer, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
+                System.arraycopy(((DatagramPacket)delayRequest[0]).getData(), 0, buffer, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
                 nanoTime = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong((Long)delayRequest[1]).array();
-                System.arraycopy(nanoTime, 0, buffer, Byte.SIZE / Byte.SIZE + Character.SIZE / Byte.SIZE, nanoTime.length);
+                System.arraycopy(nanoTime, 0, buffer, (Byte.SIZE + Character.SIZE) / Byte.SIZE, nanoTime.length);
+System.out.println("J'envoie " + new Integer(buffer[0]) + ", protocol " + new Integer(Protocol.DELAY_RESPONSE) + " a " + ((DatagramPacket)delayRequest[0]).getAddress());
 
                 delayResponse.setData(buffer);
                 delayResponse.setAddress(((DatagramPacket)delayRequest[0]).getAddress());

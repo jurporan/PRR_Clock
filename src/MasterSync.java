@@ -49,7 +49,7 @@ public class MasterSync extends Thread
                 packetSync.setData(bufferSync);
                 currentNanoTime = System.nanoTime();
                 socket.send(packetSync);
-
+                
                 // Building FOLLOW_UP message
                 System.arraycopy(idMessage, 0, bufferFollowUp, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
                 byte[] nanoTime = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(currentNanoTime).array();
@@ -58,7 +58,9 @@ public class MasterSync extends Thread
                 // Sending the FOLLOW_UP message
                 packetFollowUp.setData(bufferFollowUp);
                 socket.send(packetFollowUp);
-
+                
+                System.out.println("Nanotime envoye " + currentNanoTime);
+                
                 Thread.sleep(Protocol.K);
             }
             catch(Exception e){}

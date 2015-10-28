@@ -25,11 +25,11 @@ public class DelayRequest extends Thread
             Long currentNanoTime;
             
             sendBuffer[0] = Protocol.DELAY_REQUEST;
-            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, master, Protocol.port);
+            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, master, 1818);
 
             while (true)
             {
-                try {Thread.sleep(Protocol.K * (r.nextInt(56) + 4));}
+                try {Thread.sleep(Protocol.K * (r.nextInt(1) + 4));}
                 catch (Exception e) {}
                 
                 System.out.println("Envoi delay request");

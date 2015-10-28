@@ -20,8 +20,11 @@ public class DelayResponse extends Thread implements Observer
         DatagramPacket packet = (DatagramPacket) ((Object[]) arg)[0];
         byte[] data = packet.getData();
         
+        System.out.println("TYPE RECU: " + new Integer(data[0]));
+        
         if (data[0] == Protocol.DELAY_RESPONSE)
         {
+            System.out.println("Delay response reçue");
             byte[] copy = new byte[data.length];
             System.arraycopy(data, 0, copy, 0, data.length);
             queue.store(copy, (Long) ((Object[]) arg)[1]);
@@ -29,6 +32,7 @@ public class DelayResponse extends Thread implements Observer
         }
         else if (data[0] == Protocol.SYNC && !sender.isAlive())
         {
+            System.out.println("Demarrage des delay requests, adresse " + packet.getAddress());
             sender.setMaster(packet.getAddress());
             sender.start();
         }
