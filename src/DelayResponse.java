@@ -22,7 +22,9 @@ public class DelayResponse extends Thread implements Observer
         
         if (data[0] == Protocol.DELAY_RESPONSE)
         {
-            queue.store(data, (Long) ((Object[]) arg)[1]);
+            byte[] copy = new byte[data.length];
+            System.arraycopy(data, 0, copy, 0, data.length);
+            queue.store(copy, (Long) ((Object[]) arg)[1]);
             resume();
         }
         else if (data[0] == Protocol.SYNC && !sender.isAlive())
@@ -45,6 +47,8 @@ public class DelayResponse extends Thread implements Observer
                 catch (Exception e) {}
             }
             
+            System.out.println("Traitement delay response");
+            
             Object[] packet = queue.getNext();
             Object[] sent = sender.getLastDelayRequest();
             
@@ -55,6 +59,7 @@ public class DelayResponse extends Thread implements Observer
             if (no == (char) sent[0])
             {
                 delay.setDelay((nanotime - (Long) sent[1]) / 2);
+                System.out.println("Nouveau décalage: " + ((nanotime - (Long) sent[1]) / 2));
             }
         }
     }

@@ -42,7 +42,6 @@ public class MasterSync extends Thread
             try
             {
                 // Building SYNC message
-                currentNanoTime = System.nanoTime();
                 byte[] idMessage = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(++lastId).array();
                 System.arraycopy(idMessage, 0, bufferSync, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
 

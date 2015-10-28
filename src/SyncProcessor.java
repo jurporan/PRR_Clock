@@ -22,7 +22,9 @@ public class SyncProcessor extends Thread implements Observer
         
         if (data[0] == Protocol.SYNC || data[0] == Protocol.FOLLOW_UP)
         {
-            queue.store(data, (Long) ((Object[]) arg)[1]);
+            byte[] copy = new byte[data.length];
+            System.arraycopy(data, 0, copy, 0, data.length);
+            queue.store(copy, (Long) ((Object[]) arg)[1]);
             resume();
         }
     }
@@ -39,20 +41,24 @@ public class SyncProcessor extends Thread implements Observer
             
             Object[] packet = queue.getNext();
             ByteBuffer bf = ByteBuffer.wrap((byte[]) packet[0]);
-            byte type = bf.get(0);
+            byte type = ((byte[]) packet[0])[0];
             Character no = bf.getChar(1);
+            
+            System.out.println("Sync recoit type " + new Integer(type));
 
             switch (type)
             {
                 case Protocol.SYNC:
-                nanotime = (Long) packet[1];
+                nanotime = System.nanoTime();
                 lastNo = no;
+                System.out.println("traitement sync");
                 break;
                 
                 case Protocol.FOLLOW_UP:
                 if (lastNo != no) {break;}
                 Long time = bf.getLong(2);
                 delay.setDelay(time - nanotime);
+                System.out.println("traitement followup: " + (time - nanotime));
                 break;
             }
         }

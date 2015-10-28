@@ -32,6 +32,8 @@ public class DelayRequest extends Thread
                 try {Thread.sleep(Protocol.K * (r.nextInt(56) + 4));}
                 catch (Exception e) {}
                 
+                System.out.println("Envoi delay request");
+                
                 byte[] noObject = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(no++).array();
                 System.arraycopy(noObject, 0, sendBuffer, 1, Character.SIZE / Byte.SIZE);
 
