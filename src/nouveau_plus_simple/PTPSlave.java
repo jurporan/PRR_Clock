@@ -24,7 +24,7 @@ public class PTPSlave extends Thread
     private Long delay = 0l;
     private Long gap = 0l;
     
-    // Variables locales mémorisant le numéro et l'horodatage plus récent paquet SYNC reçu
+    // Variables locales mémorisant le numéro et l'heure de réception du plus récent paquet SYNC reçu
     private char lastSyncId;
     private Long lastSyncTime;
     
