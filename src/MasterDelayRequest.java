@@ -16,10 +16,15 @@ public class MasterDelayRequest extends Thread implements Observer
     public void update(Observable o, Object arg)
     {
         Object[] data = (Object[]) arg;
+        DatagramPacket datagram = (DatagramPacket) data[0];
+        
         if (((DatagramPacket)data[0]).getData()[0] == Protocol.DELAY_REQUEST)
         {
             System.out.println("COUCOU");
-            requestQueue.store(data[0], (Long) data[1]);
+            byte[] pouet = new byte[datagram.getData().length];
+            System.arraycopy(datagram.getData(), 0, pouet, 0, datagram.getData().length);
+            DatagramPacket copy = new DatagramPacket(pouet, pouet.length, datagram.getAddress(), datagram.getPort());
+            requestQueue.store(copy, (Long) data[1]);
             resume();
         }
     }
@@ -44,8 +49,15 @@ public class MasterDelayRequest extends Thread implements Observer
 
             System.out.println("Fromage");
             delayRequest = requestQueue.getNext();
-            System.arraycopy(((DatagramPacket)delayRequest[0]).getData(), 1, buffer, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
+            System.out.println("Fromage2");
+            DatagramPacket caca = (DatagramPacket)delayRequest[0];
+            System.out.println("Fromage2 bis");// IL SE BLOQUE ICIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIi
+            byte[] xxx = caca.getData();
+            System.out.println("Fromage2 bis bis");
+            System.arraycopy(xxx, 1, buffer, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
+            System.out.println("Fromage3");
             nanoTime = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong((Long)delayRequest[1]).array();
+            System.out.println("Fromage4");
             System.arraycopy(nanoTime, 0, buffer, (Byte.SIZE + Character.SIZE) / Byte.SIZE, nanoTime.length);
             System.out.println("NVUASFISA");
 
