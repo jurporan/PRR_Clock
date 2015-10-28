@@ -9,17 +9,17 @@ public class SyncProcessor extends Thread implements Observer
     private Queue queue = new Queue();
     private Character lastNo;
     private Long nanotime;
-    
+
     public SyncProcessor(Delay delay)
     {
         this.delay = delay;
     }
-    
+
     public void update(Observable o, Object arg)
     {
         DatagramPacket packet = (DatagramPacket) ((Object[]) arg)[0];
         byte[] data = packet.getData();
-        
+
         if (data[0] == Protocol.SYNC || data[0] == Protocol.FOLLOW_UP)
         {
             byte[] copy = new byte[data.length];
@@ -28,7 +28,7 @@ public class SyncProcessor extends Thread implements Observer
             resume();
         }
     }
-    
+
     public void run()
     {
         while (true)
@@ -38,28 +38,23 @@ public class SyncProcessor extends Thread implements Observer
                 try {suspend();}
                 catch (Exception e) {}
             }
-            
+
             Object[] packet = queue.getNext();
             ByteBuffer bf = ByteBuffer.wrap((byte[]) packet[0]);
             byte type = ((byte[]) packet[0])[0];
             Character no = bf.getChar(1);
-            
-            System.out.println("Sync recoit type " + new Integer(type));
 
             switch (type)
             {
                 case Protocol.SYNC:
                 nanotime = System.nanoTime();
                 lastNo = no;
-                System.out.println("traitement sync");
                 break;
-                
+
                 case Protocol.FOLLOW_UP:
                 if (lastNo != no) {break;}
                 Long time = bf.getLong(3);
                 delay.setGap(time - nanotime);
-                System.out.println("Nnaotime local: " + nanotime);
-                System.out.println("Nnaotime recu: " + time);
                 System.out.println("traitement followup: " + (time - nanotime));
                 break;
             }

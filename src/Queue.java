@@ -22,7 +22,7 @@ public class Queue
         queue.addFirst(new Object[] {data, time});
         lock.unlock();
     }
-    
+
     public int size()
     {
         lock.lock();

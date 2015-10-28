@@ -10,13 +10,13 @@ public class DelayRequest extends Thread
     private Long lastSentTime;
     private InetAddress master;
     private Delay delay;
-    
+
     public DelayRequest(MulticastSocket socket, Delay delay)
     {
         this.socket = socket;
         this.delay = delay;
     }
-    
+
     public void run()
     {
         try
@@ -25,7 +25,7 @@ public class DelayRequest extends Thread
             byte[] sendBuffer = new byte[(Byte.SIZE + Character.SIZE) / Byte.SIZE];
             char no = 0;
             Long currentNanoTime;
-            
+
             sendBuffer[0] = Protocol.DELAY_REQUEST;
             DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, master, 1818);
 
@@ -33,9 +33,7 @@ public class DelayRequest extends Thread
             {
                 try {Thread.sleep(Protocol.K * (r.nextInt(1) + 4));}
                 catch (Exception e) {}
-                
-                System.out.println("Envoi delay request");
-                
+
                 byte[] noObject = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(no).array();
                 System.arraycopy(noObject, 0, sendBuffer, 1, Character.SIZE / Byte.SIZE);
 
@@ -43,22 +41,23 @@ public class DelayRequest extends Thread
                 currentNanoTime = System.nanoTime();
                 socket.send(sendPacket);
                 setLastDelayRequest(no++, currentNanoTime + delay.getGap());
+                System.out.println("Saved DelayRequest : id :" + (Integer)(no - 1) + " time : " + (Long)( currentNanoTime + delay.getGap()));
             }
         }
         catch (Exception e) {}
     }
-    
+
     public synchronized void setLastDelayRequest(char id, Long time)
     {
         lastSentID = id;
         lastSentTime = time;
     }
-    
+
     public synchronized Object[] getLastDelayRequest()
     {
         return new Object[] {lastSentID, lastSentTime};
     }
-    
+
     public void setMaster(InetAddress master)
     {
         this.master = master;

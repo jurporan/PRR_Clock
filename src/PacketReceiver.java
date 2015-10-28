@@ -24,9 +24,9 @@ public class PacketReceiver extends Observable implements Runnable
         {
             try {socket.receive(packet);}
             catch (Exception e) {}
-            timeStampedPacket[0] = packet;
             timeStampedPacket[1] = System.nanoTime();
-System.out.println("paquet reçz");
+            timeStampedPacket[0] = packet;
+            System.out.println("paquet reçu");
             setChanged();
             notifyObservers(timeStampedPacket);
         }
