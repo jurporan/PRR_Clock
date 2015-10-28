@@ -17,7 +17,7 @@ public class PTPSlave
             group = InetAddress.getByName(Protocol.group);
             socket.joinGroup(group);
 
-            DelayRequest sender = new DelayRequest(socket);
+            DelayRequest sender = new DelayRequest(socket, delay);
             SyncProcessor sync = new SyncProcessor(delay);
             DelayResponse response = new DelayResponse(sender, delay);
             PacketReceiver receiver = new PacketReceiver(socket);

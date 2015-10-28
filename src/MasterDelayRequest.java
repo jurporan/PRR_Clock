@@ -28,6 +28,7 @@ public class MasterDelayRequest extends Thread implements Observer
         Object[] delayRequest;
         byte[] buffer = new byte[(Byte.SIZE + Character.SIZE + Long.SIZE) / Byte.SIZE];
         DatagramPacket delayResponse = new DatagramPacket(buffer, buffer.length);
+        delayResponse.setPort(Protocol.port);
         buffer[0] = Protocol.DELAY_RESPONSE;
         byte[] nanoTime;
 
@@ -35,15 +36,18 @@ public class MasterDelayRequest extends Thread implements Observer
         {
             suspend();
             while(requestQueue.size() > 0)
-            {
+            {                
                 delayRequest = requestQueue.getNext();
-                System.arraycopy(((DatagramPacket)delayRequest[0]).getData(), 0, buffer, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
+                System.arraycopy(((DatagramPacket)delayRequest[0]).getData(), 1, buffer, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
                 nanoTime = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong((Long)delayRequest[1]).array();
                 System.arraycopy(nanoTime, 0, buffer, (Byte.SIZE + Character.SIZE) / Byte.SIZE, nanoTime.length);
-System.out.println("J'envoie " + new Integer(buffer[0]) + ", protocol " + new Integer(Protocol.DELAY_RESPONSE) + " a " + ((DatagramPacket)delayRequest[0]).getAddress());
-
+                
+                delayResponse = new DatagramPacket(buffer, buffer.length, ((DatagramPacket)delayRequest[0]).getAddress(), 1212);
                 delayResponse.setData(buffer);
-                delayResponse.setAddress(((DatagramPacket)delayRequest[0]).getAddress());
+                //delayResponse.setAddress(((DatagramPacket)delayRequest[0]).getAddress());
+                
+                System.out.println("J'envoie " + new Integer(buffer[0]) + ", protocol " + new Integer(Protocol.DELAY_RESPONSE) + " a " + delayResponse.getAddress() + " au port " + delayResponse.getPort());
+                
                 try
                 {
                     socket.send(delayResponse);

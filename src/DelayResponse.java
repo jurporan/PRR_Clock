@@ -58,7 +58,9 @@ public class DelayResponse extends Thread implements Observer
             
             ByteBuffer bf = ByteBuffer.wrap((byte[]) packet[0]);
             no = bf.getChar(1);
-            nanotime = bf.getLong(2);
+            nanotime = bf.getLong(3);
+            
+            System.out.println("Local " + new Integer((char) sent[0]) + ", reçu " + new Integer(no));
             
             if (no == (char) sent[0])
             {
