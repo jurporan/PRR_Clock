@@ -10,7 +10,7 @@ public class PacketReceiver extends Observable implements Runnable
     private DatagramPacket packet;
     private Object[] timeStampedPacket;
 
-    public PacketReceiver(MulticastSocket socket) throws IOException
+    public PacketReceiver(MulticastSocket socket)
     {
         this.socket = socket;
         buffer = new byte[(Byte.SIZE + Character.SIZE + Long.SIZE) / Byte.SIZE];
