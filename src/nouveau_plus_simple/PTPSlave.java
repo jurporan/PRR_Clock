@@ -86,6 +86,6 @@ public class PTPSlave extends Thread
     
     public Long getTime()
     {
-        return System.nanoTime() + gap + delay;
+        return System.nanoTime() + gap - delay;
     }
 }
