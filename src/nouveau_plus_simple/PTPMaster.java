@@ -1,8 +1,8 @@
 /*
-Auteurs : Jan Purro et Benois Wolleb
-Projet : PRR_Clock
-Fichier : PTPMaster.java
-Description : Classe qui fait un truc.
+    Auteurs : Jan Purro et Benois Wolleb
+    Projet : PRR_Clock
+    Fichier : PTPMaster.java
+    Description : Classe qui fait un truc.
 */
 
 import java.net.*;
@@ -18,9 +18,9 @@ public class PTPMaster extends Thread
     private Heartbeat heartbeat;
 
     /*
-    Constructeur
-    Paramètre : -
-    Description : Construit l'objet...
+        Constructeur
+        Paramètre : -
+        Description : Construit l'objet...
     */
     public PTPMaster()
     {
