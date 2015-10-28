@@ -3,20 +3,37 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Delay
 {
     private Long delay;
-    private ReentrantLock lock = new ReentrantLock();
+    private Long gap;
+    private ReentrantLock delayLock = new ReentrantLock();
+    private ReentrantLock gapLock = new ReentrantLock();
     
     public synchronized void setDelay(Long delay)
     {
-        lock.lock();
+        delayLock.lock();
         this.delay = delay;
-        lock.unlock();
+        delayLock.unlock();
     }
     
     public synchronized Long getDelay()
     {
-        lock.lock();
+        delayLock.lock();
         Long d = delay;
-        lock.unlock();
+        delayLock.unlock();
         return d;
+    }
+    
+    public synchronized void setGap(Long gap)
+    {
+        gapLock.lock();
+        this.gap = gap;
+        gapLock.unlock();
+    }
+    
+    public synchronized Long getGap()
+    {
+        gapLock.lock();
+        Long g = gap;
+        gapLock.unlock();
+        return g;
     }
 }

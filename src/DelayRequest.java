@@ -25,7 +25,6 @@ public class DelayRequest extends Thread
             byte[] sendBuffer = new byte[(Byte.SIZE + Character.SIZE) / Byte.SIZE];
             char no = 0;
             Long currentNanoTime;
-            Long localDelay;
             
             sendBuffer[0] = Protocol.DELAY_REQUEST;
             DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, master, 1818);
@@ -35,17 +34,15 @@ public class DelayRequest extends Thread
                 try {Thread.sleep(Protocol.K * (r.nextInt(1) + 4));}
                 catch (Exception e) {}
                 
-                localDelay = delay.getDelay();
-                
                 System.out.println("Envoi delay request");
                 
                 byte[] noObject = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(no).array();
                 System.arraycopy(noObject, 0, sendBuffer, 1, Character.SIZE / Byte.SIZE);
 
                 sendPacket.setData(sendBuffer);
-                currentNanoTime = System.nanoTime() + localDelay;
+                currentNanoTime = System.nanoTime();
                 socket.send(sendPacket);
-                setLastDelayRequest(no++, currentNanoTime);
+                setLastDelayRequest(no++, currentNanoTime + delay.getGap());
             }
         }
         catch (Exception e) {}
