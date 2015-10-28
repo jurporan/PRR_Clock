@@ -77,4 +77,9 @@ public class PTPMaster extends Thread
             }
         }
     }
+    
+    public Long getTime()
+    {
+        return System.nanoTime();
+    }
 }
