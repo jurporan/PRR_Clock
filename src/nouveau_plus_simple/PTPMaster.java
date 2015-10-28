@@ -1,8 +1,8 @@
 /*
-Auteurs : Jan Purro et Benois Wolleb
-Projet : PRR_Clock
-Fichier : PTPMaster.java
-Description : Classe qui fait un truc.
+    Auteurs :       Jan Purro et Benois Wolleb
+    Projet :        PRR_Clock
+    Fichier :       PTPMaster.java
+    Description :   Classe qui fait un truc.
 */
 
 import java.net.*;
