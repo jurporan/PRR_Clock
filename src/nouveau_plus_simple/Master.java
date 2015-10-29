@@ -2,11 +2,13 @@
     Auteurs :       Jan Purro et Benois Wolleb
     Projet :        PRR_Clock
     Fichier :       Master.java
-    Description :   Cette classe contient l'un des programmes principal du laboratoire. Elle lance  un maître PTP et affiche périodiquement son heure.
+    Description :   Cette classe contient l'un des programmes principaux du
+                    laboratoire. Elle lance un maître PTP et affiche
+                    périodiquement son heure.
 
     Description du programme :
     Il s'agit du programme maître du protocole PTP. Il se contente de lancer un
-    objet PTPMaster et de lui demander l'heure à intervalle régulier, afin de
+    objet PTPMaster et de lui demander l'heure à intervalles réguliers, afin de
     donner un exemple de fonctionnement.
 
     Il existe un programme esclave, qui peut être lancé sur une autre machine,
@@ -15,7 +17,7 @@
 
     L'objet PTPMaster est celui qui s'occupe de toute la logique du côté maître.
     Il lance un Heartbeat, un thread indépendant dont le rôle est d'envoyer les
-    deux messages de synchronisations (SYNC et FOLLOW_UP) à intervales réguliers
+    deux messages de synchronisations (SYNC et FOLLOW_UP) à intervalles réguliers
     K. La classe PTPMaster s'occupe également de la réception des messages de
     type DELAY_REQUEST qui lui sont adressé par les esclaves. Lorsqu'un tel
     message est reçu, un message DELAY_RESPONSE est construit et envoyé à
@@ -23,7 +25,7 @@
 
     L'objet PTPSlave effectue un travail similaire du côté esclave du protocole.
     Il lance un thread DelayRequester qui se charge d'envoyer des messages
-    DELAY_REQUEST à intervals [4k-60k] au maître. Ce thread n'est lancé qu'une
+    DELAY_REQUEST à intervalles [4k-60k] au maître. Ce thread n'est lancé qu'une
     fois qu'un paquet SYNC a été reçu.
     La classe PTPSlave s'occupe également de la réception des paquets SYNC,
     FOLLOW_UP et DELAY_RESPONSE envoyés par le maître. C'est également elle qui
@@ -48,13 +50,13 @@
     FOLLOW_UP et DELAY_RESPONSE en contiennent.
     Les identifiants recommenceront à zéro au bout d'un moment (2^16 - 1
     messages), mais cela ne devrait pas être problématique (les messages étant
-    rarement envoyé, il est extrêmement improbables que deux messages ayant le
+    rarement envoyés, il est extrêmement improbable que deux messages ayant le
     même identifiant et le même type se trouvent sur le réseau en même temps.)
 
     La classe Protocol contient certaines constantes nécessaire au maître et
-    aux esclaves, noatemment les valeurs correspondant aux différents types de
+    aux esclaves, notamment les valeurs correspondant aux différents types de
     message. Nous avons choisi arbitrairement un intervalle K de 1 seconde, qui
-    peut facilement être changer dans cette classe.
+    peut facilement être changé dans cette classe.
 */
 
 

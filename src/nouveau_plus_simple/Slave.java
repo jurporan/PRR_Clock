@@ -26,8 +26,8 @@ public class Slave
         {
             try {Thread.sleep(2000);}
             catch (Exception e) {}
-
-            System.out.println("Heure: " + slave.getTime());
+            
+            System.out.println("Heure: " + slave.getTime() + ", écart: " + slave.getGap() + ", délai: " + slave.getDelay());
         }
     }
 }
