@@ -3,7 +3,7 @@
     Projet : PRR_Clock
     Fichier : Heartbeat.java
     Description : Cette classe implémente une unité du maître PTP. Elle
-    envoye, à intervall k, un message SYNC, suivi d'un message FOLLOW_UP à
+    envoie, à intervalle k, un message SYNC, suivi d'un message FOLLOW_UP à
     tout les esclaves abonnés au groupe.
 */
 
@@ -59,7 +59,7 @@ public class Heartbeat extends Thread
         // Variables utilisées lors de la construction des messages.
         byte[] idMessage;
 
-        // Envoie un SYNC suivi d'un FOLLOW_UP à interval K.
+        // Envoie un SYNC suivi d'un FOLLOW_UP à intervalle K.
         while (true)
         {
             try
