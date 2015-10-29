@@ -5,6 +5,8 @@
     Description :   Cette classe contient le programme principal du laboratoire. Elle lance simplement un client PTP et affiche périodiquement l'heure synchronisée.
 */
 
+// Description du programme : cf Master.java.
+
 
 public class Slave
 {
@@ -16,10 +18,10 @@ public class Slave
     {
         // Construction du client PTP
         PTPSlave slave = new PTPSlave();
-        
+
         System.out.println("Heure avant le lancement de PTPSlave: " + slave.getTime());
         slave.start();
-        
+
         while(true)
         {
             try {Thread.sleep(2000);}
