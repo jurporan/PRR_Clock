@@ -17,7 +17,7 @@ public class Heartbeat extends Thread
     // Socket permettant l'envoi et la reception de datagram.
     private MulticastSocket socket;
     // Adresse du groupe multicast auquel est abonné le socket
-
+    private InetAddress group;
     /*
         Paramètre : - socket : le socket qui sera utilisé par le heartbeat pour
                                envoyer des paquets sur le réseau.
@@ -65,7 +65,7 @@ public class Heartbeat extends Thread
             try
             {
                 // Construction du message SYNC (on change l'id du message.)
-                byteidMessage = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(++lastId).array();
+                idMessage = ByteBuffer.allocate(Character.SIZE / Byte.SIZE).putChar(++lastId).array();
 
                 System.arraycopy(idMessage, 0, bufferSync, Byte.SIZE / Byte.SIZE, Character.SIZE / Byte.SIZE);
 

@@ -120,7 +120,7 @@ public class PTPMaster extends Thread
                     }
                     break;
 
-                case default :
+                default :
                     break;
             }
         }
