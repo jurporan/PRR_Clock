@@ -127,4 +127,22 @@ public class PTPSlave extends Thread
     {
         return System.nanoTime() + gap - delay;
     }
+    
+    /*
+        Paramètre : -
+        Description : Cette fonction permet à son appelant de connaître l'écart
+    */
+    public Long getGap()
+    {
+        return gap;
+    }
+
+    /*
+        Paramètre : -
+        Description : Cette fonction permet à son appelant de connaître le délai de transmission
+    */
+    public Long getDelay()
+    {
+        return delay;
+    }
 }
